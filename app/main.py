@@ -11,16 +11,17 @@ PASSWORD = os.getenv("WATTTIME_PASSWORD")
 EMAIL = os.getenv("EMAIL")
 ORG = os.getenv("ORG") or None
 
+
 def register():
     url = f"{BASE_URL}/register"
-    payload = {
+    params = {
         "username": USERNAME,
         "password": PASSWORD,
         "email": EMAIL,
         "org": ORG,
     }
-    response = requests.post(url, json=payload)
-    print("REGISTER:", response.json())
+    response = requests.post(url, json=params)
+    print(response.json())
 
 
 def login():
@@ -39,15 +40,33 @@ def login():
 def get_account_access(token):
     url = f"{BASE_URL}/v3/my-access"
     headers = {"Authorization": f"Bearer {token}"}
-    response = requests.get(url, headers=headers)
+    params = {
+        # "region": "CAISO_NORTH",
+        # "signal_type" : "co2_moer"  
+    }
+    response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
-    print("MY_ACCESS:", response.json())
+    print(response.json())
+
+
+def get_forecast(token):
+    url = f"{BASE_URL}/v3/forecast"
+    headers = {"Authorization": f"Bearer {token}"}
+    params = {
+        "region": "CAISO_NORTH",
+        "signal_type" : "co2_moer",
+        "horizon_hours" : 0,  
+    }
+    response = requests.get(url, headers=headers, params=params)
+    response.raise_for_status()
+    print(response.json())
 
 
 def main():
     # register() # Run this ONLY once, then comment it out
     token = login()
-    get_account_access(token)
+    # get_account_access(token)
+    get_forecast(token)
 
 if __name__ == "__main__":
     main()
