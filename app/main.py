@@ -1,8 +1,5 @@
 import requests
 import os
-# from typing import Optional
-# from fastapi import FastAPI
-# from pydantic import BaseModel, EmailStr
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 
@@ -13,38 +10,6 @@ USERNAME = os.getenv("WATTTIME_USERNAME")
 PASSWORD = os.getenv("WATTTIME_PASSWORD")
 EMAIL = os.getenv("EMAIL")
 ORG = os.getenv("ORG") or None
-
-# Models
-# class NewUser(BaseModel):
-#     username: str
-#     password: str
-#     email: EmailStr
-#     org: Optional[str] = None
-
-# class UserResponse(BaseModel):
-#     message: str
-#     username: str
-
-# App init
-# app = FastAPI()
-
-# @app.get("/")
-# def root():
-#     return {"message": "API is running"}
-
-# @app.post("/register", response_model=UserResponse)
-# def register(user: NewUser):
-#     url = f"{BASE_URL}/register"
-#     params = {'username': USERNAME,
-#               'password': PASSWORD,
-#               'email': EMAIL,
-#               'org': ORG}
-#     response = requests.post(url, params=params)
-#     response.raise_for_status()
-#     return {
-#         "message": "New user registered successfully",
-#         "username": USERNAME
-#     }
 
 def register():
     url = f"{BASE_URL}/register"
