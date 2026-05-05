@@ -71,20 +71,18 @@ def login():
     return token
 
 
-def get_index(token):
-    url = f"{BASE_URL}/index"
+def get_account_access(token):
+    url = f"{BASE_URL}/v3/my-access"
     headers = {"Authorization": f"Bearer {token}"}
-    params = {
-        "ba": "CAISO_NORTH"
-    }
-    response = requests.get(url, headers=headers, params=params)
-    print("INDEX:", response.json())
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    print("MY_ACCESS:", response.json())
 
 
 def main():
     # register() # Run this ONLY once, then comment it out
     token = login()
-    get_index(token)
+    get_account_access(token)
 
 if __name__ == "__main__":
     main()
