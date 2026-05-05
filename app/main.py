@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import time
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 
@@ -11,6 +12,7 @@ USERNAME = os.getenv("WATTTIME_USERNAME")
 PASSWORD = os.getenv("WATTTIME_PASSWORD")
 EMAIL = os.getenv("EMAIL")
 ORG = os.getenv("ORG") or None
+_token_cache = {"token": None, "expires_at":0}
 
 
 def register():
@@ -37,6 +39,14 @@ def login():
         raise Exception(f"Login failed: {data}")
     return token
 
+def get_token():
+    now = time.time()
+    if _token_cache["token"] and now < _token_cache["expires_at"]:
+        return _token_cache["token"]
+    token = login()
+    _token_cache["token"] = token
+    _token_cache["expires_at"] = now + (29*60) # Refresh before 30 minutes expiration
+    return token
 
 def get_account_access(token):
     url = f"{BASE_URL}/v3/my-access"
@@ -68,7 +78,7 @@ def get_forecast(token):
 
 def main():
     # register() # Run this ONLY once, then comment it out
-    token = login()
+    token = get_token() # Rate limit
     # get_account_access(token)
     get_forecast(token)
 
