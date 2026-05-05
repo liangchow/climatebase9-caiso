@@ -2,3 +2,5 @@ venv/
 resources/
 __pycache__/
 .env
+
+output.json

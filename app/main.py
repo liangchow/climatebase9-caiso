@@ -1,4 +1,5 @@
 import requests
+import json
 import os
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
@@ -55,11 +56,14 @@ def get_forecast(token):
     params = {
         "region": "CAISO_NORTH",
         "signal_type" : "co2_moer",
-        "horizon_hours" : 0,  
+        "horizon_hours" : 24,  
     }
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
     print(response.json())
+    
+    with open("output.json", "w") as file:
+        json.dump(response.json(), file)
 
 
 def main():
